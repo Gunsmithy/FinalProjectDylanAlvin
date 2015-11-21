@@ -95,5 +95,9 @@ public class CountdownFragment extends Fragment {
         // TODO: Update argument type and name
         void onCountdownFragmentInteraction(String string);
     }
+    public void timechange()
+    {
+
+    }
 
 }

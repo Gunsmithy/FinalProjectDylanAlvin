@@ -11,9 +11,16 @@
     <string name="youTubeFeed">YouTube Feed</string>
     <string name="twitterFeed">Twitter Feed</string>
 
-    <string name="communicate">Communicate</string>
-    <string name="contactDevs">Contact Developers</string>
+    <string name="settings">Settings</string>
+    <string name="feedback">Send Feedback</string>
 
     <string name="dylanEmail">dylan.kauling@uoit.net</string>
     <string name="alvinEmail">alvin.lee@uoit.net</string>
+
+    <string name="countdownDefault">0d 00h 00m 00s</string>
+    <string name="mapDefault">A map would be here</string>
+    <string name="twitterDefault">A Twitter feed goes here</string>
+    <string name="youTubeDefault">A YouTube feed goes here</string>
+    <string name="settingsDefault">Settings go here</string>
+    <string name="feedbackDefault">An email activity prompt and stuff goes here</string>
 </resources>

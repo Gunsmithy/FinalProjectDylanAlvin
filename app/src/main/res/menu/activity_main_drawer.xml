@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
-        <item android:id="@+id/nav_camara" android:icon="@android:drawable/ic_menu_today"
+    <group android:id="@+id/menu_top" android:checkableBehavior="single">
+        <item android:id="@+id/nav_countdown" android:icon="@android:drawable/ic_menu_today"
             android:title="@string/countdownTimer" />
-        <item android:id="@+id/nav_gallery" android:icon="@android:drawable/ic_menu_compass"
+        <item android:id="@+id/nav_finder" android:icon="@android:drawable/ic_menu_compass"
             android:title="@string/theatreFinder" />
-        <item android:id="@+id/nav_slideshow" android:icon="@android:drawable/ic_menu_share"
+        <item android:id="@+id/nav_twitter" android:icon="@android:drawable/ic_menu_share"
             android:title="@string/twitterFeed" />
-        <item android:id="@+id/nav_manage" android:icon="@android:drawable/ic_menu_slideshow"
+        <item android:id="@+id/nav_youtube" android:icon="@android:drawable/ic_menu_slideshow"
             android:title="@string/youTubeFeed" />
     </group>
 
-    <item android:title="@string/communicate">
-        <menu>
-            <item android:id="@+id/nav_send" android:icon="@android:drawable/ic_menu_send"
-                android:title="@string/contactDevs" />
-        </menu>
-    </item>
+    <group android:id="@+id/menu_bottom" android:checkableBehavior="single">
+        <item android:id="@+id/nav_settings" android:icon="@android:drawable/ic_menu_preferences"
+            android:title="@string/settings" />
+        <item android:id="@+id/nav_feedback" android:icon="@android:drawable/ic_menu_send"
+            android:title="@string/feedback" />
+    </group>
+
+
 
 </menu>

@@ -1,5 +1,6 @@
 package com.example.dylan.finalprojectdylanalvin;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,6 +17,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.google.android.youtube.player.YouTubeApiServiceUtil;
 import com.google.android.youtube.player.YouTubeInitializationResult;
+
+import com.google.android.youtube.player.YouTubeBaseActivity;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayer.Provider;
+import com.google.android.youtube.player.YouTubePlayerView;
 
 
 public class MainActivity extends AppCompatActivity
@@ -75,7 +81,7 @@ public class MainActivity extends AppCompatActivity
     {
         private Config()
         {
-            final String YOUTUBE_API_KEY=" com.example.dylan.finalprojectdylanalvin";
+            final String YOUTUBE_API_KEY=" AIzaSyDr-JHyYE1xGBlkxgbJz0hBHqu5l7swx80";
         }
     }
     @Override

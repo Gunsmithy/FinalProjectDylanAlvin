@@ -23,4 +23,8 @@
     <string name="youTubeDefault">A YouTube feed goes here</string>
     <string name="settingsDefault">Settings go here</string>
     <string name="feedbackDefault">An email activity prompt and stuff goes here</string>
+
+
+    <string name= "player_error">Error Initializing Player</string>
+
 </resources>

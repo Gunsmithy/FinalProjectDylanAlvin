@@ -134,8 +134,14 @@ public class MainActivity extends AppCompatActivity
                 title = getString(R.string.settings);
                 break;
             case R.id.nav_feedback:
-                fragment = new FeedbackFragment();
-                title = getString(R.string.feedback);
+                //fragment = new FeedbackFragment();
+                //title = getString(R.string.feedback);
+                Intent Email = new Intent(Intent.ACTION_SEND);
+                Email.setType("text/email");
+                Email.putExtra(Intent.EXTRA_EMAIL, new String[] { getString(R.string.dylanEmail) });
+                Email.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.emailSubject));
+                Email.putExtra(Intent.EXTRA_TEXT, getString(R.string.emailBody) + "\n\n");
+                startActivity(Intent.createChooser(Email, getString(R.string.feedback)));
                 break;
         }
 

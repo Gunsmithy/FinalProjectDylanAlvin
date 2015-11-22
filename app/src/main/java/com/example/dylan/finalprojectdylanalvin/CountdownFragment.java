@@ -1,13 +1,23 @@
 package com.example.dylan.finalprojectdylanalvin;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 //import android.app.Fragment;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /**
@@ -29,6 +39,9 @@ public class CountdownFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private final Handler h = new Handler();
+    private final int delay = 1000; //milliseconds
 
     /**
      * Use this factory method to create a new instance of
@@ -59,6 +72,57 @@ public class CountdownFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        /*SimpleDateFormat dformat = new SimpleDateFormat("dd-MM-yyyy");
+        Date launchDate = null;
+        try {
+            launchDate = dformat.parse("18-12-2015");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        //     .getTime() does the conversion: Date --> long
+        CountDownTimer cdt = new CountDownTimer(launchDate.getTime(), 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                TextView countdownLabel = (TextView)getView().findViewById(R.id.countdownLabel);
+                long seconds = (System.currentTimeMillis() - millisUntilFinished) / 1000;
+                long minutes = seconds / 60;
+                long hours = minutes / 60;
+                long days = hours / 24;
+                String time = days + ":" + hours % 24 + ":" + minutes % 60 + ":" + seconds % 60;
+                countdownLabel.setText(time);
+            }
+
+            public void onFinish() {
+                // TODO Auto-generated method stub
+
+            }
+        }.start();*/
+
+        secondTick();
+    }
+
+    public void secondTick(){
+        h.postDelayed(new Runnable() {
+            public void run() {
+                Time now = new Time();
+                now.setToNow();
+                Time launch = new Time();
+                launch.set(18, 11, 2015);
+                TextView countdownLabel = (TextView) getView().findViewById(R.id.countdownLabel);
+                long seconds = (launch.toMillis(true) - now.toMillis(true)) / 1000;
+                long minutes = seconds / 60;
+                long hours = minutes / 60;
+                long days = hours / 24;
+                String time = days + ":" + hours % 24 + ":" + minutes % 60 + ":" + seconds % 60;
+                Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/Star_Jedi_Rounded.ttf");
+                countdownLabel.setTypeface(tf);
+                countdownLabel.setTextColor(Color.parseColor("#FCDF2B"));
+                countdownLabel.setTextSize(50);
+                countdownLabel.setText(time);
+                h.postDelayed(this, delay);
+            }
+        }, delay);
     }
 
     @Override
@@ -94,10 +158,6 @@ public class CountdownFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onCountdownFragmentInteraction(String string);
-    }
-    public void timechange()
-    {
-
     }
 
 }

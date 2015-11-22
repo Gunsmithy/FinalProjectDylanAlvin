@@ -72,6 +72,7 @@ public class YouTubeFragment extends Fragment {
     public void onButtonPressed(String string) {
         if (mListener != null) {
             mListener.onYouTubeFragmentInteraction(string);
+
         }
     }
 
@@ -80,6 +81,7 @@ public class YouTubeFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
 
     /**
      * This interface must be implemented by activities that contain this

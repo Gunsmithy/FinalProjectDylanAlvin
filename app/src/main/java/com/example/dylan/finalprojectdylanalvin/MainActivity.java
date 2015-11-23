@@ -15,6 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.youtube.player.YouTubeApiServiceUtil;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 
@@ -22,6 +24,15 @@ import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayer.Provider;
 import com.google.android.youtube.player.YouTubePlayerView;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.PrintWriter;
 
 
 public class MainActivity extends AppCompatActivity
@@ -31,7 +42,10 @@ public class MainActivity extends AppCompatActivity
         TwitterFragment.OnFragmentInteractionListener,
         YouTubeFragment.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener,
-        FeedbackFragment.OnFragmentInteractionListener{
+        FeedbackFragment.OnFragmentInteractionListener,
+        OnMapReadyCallback{
+
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +124,7 @@ public class MainActivity extends AppCompatActivity
     public void displayView(int viewId) {
 
         Fragment fragment = null;
+        SupportMapFragment mMapFragment = null;
         String title = getString(R.string.app_name);
 
         switch (viewId) {
@@ -118,7 +133,8 @@ public class MainActivity extends AppCompatActivity
                 title  = getString(R.string.countdownTimer);
                 break;
             case R.id.nav_finder:
-                fragment = new FinderFragment();
+                fragment = null;
+                mMapFragment = SupportMapFragment.newInstance();
                 title = getString(R.string.theatreFinder);
                 break;
             case R.id.nav_twitter:
@@ -147,8 +163,24 @@ public class MainActivity extends AppCompatActivity
 
         if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.content_frame, fragment);
+            ft.replace(R.id.content_frame, fragment, title);
             ft.commit();
+        }
+        else{
+            if (mMapFragment != null){
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.content_frame, mMapFragment, title);
+                ft.commit();
+                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                        .findFragmentByTag(getString(R.string.theatreFinder));
+                System.out.println("HEREHEREHERE");
+                getSupportFragmentManager().dump("", null,
+                        new PrintWriter(System.out, true), null);
+                System.out.println("HEREHEREHERE");
+                if (mapFragment != null) {
+                    mapFragment.getMapAsync(this);
+                }
+            }
         }
 
         // set the toolbar title
@@ -168,6 +200,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onFinderFragmentInteraction(String string) {
         // Do stuff
+        if (string.equals("LOADED")){
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentByTag(getString(R.string.theatreFinder));
+            System.out.println("HEREHEREHERE");
+            getSupportFragmentManager().dump("", null,
+                    new PrintWriter(System.out, true), null);
+            System.out.println("HEREHEREHERE");
+            if (mapFragment != null) {
+                mapFragment.getMapAsync(this);
+            }
+        }
     }
 
     @Override
@@ -188,5 +231,15 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onFeedbackFragmentInteraction(String string) {
         // Do stuff
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(-34, 151);
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 }

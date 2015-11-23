@@ -30,4 +30,6 @@
     <string name="emailSubject">Star Wars Hype App Feedback</string>
     <string name="emailBody">To Whom it may concern,</string>
 
+    <string name="google_maps_key">AIzaSyB9NZY0wXxYbODuYgPH0FpBo-_2z9KPPGo</string>
+
 </resources>

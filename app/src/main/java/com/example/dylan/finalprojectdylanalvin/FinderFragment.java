@@ -67,10 +67,31 @@ public class FinderFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_finder, container, false);
     }
 
+    @Override
+    public void onStart(){
+        if (mListener != null) {
+            mListener.onFinderFragmentInteraction("LOADED");
+        }
+        super.onStart();
+    }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(String string) {
         if (mListener != null) {
             mListener.onFinderFragmentInteraction(string);
+        }
+    }
+
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            mListener = (OnFragmentInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnHeadlineSelectedListener");
         }
     }
 

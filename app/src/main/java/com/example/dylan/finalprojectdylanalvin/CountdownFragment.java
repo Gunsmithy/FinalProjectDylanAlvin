@@ -42,6 +42,26 @@ public class CountdownFragment extends Fragment {
 
     private final Handler h = new Handler();
     private final int delay = 1000; //milliseconds
+    private Runnable myRunnable = new Runnable() {
+        public void run() {
+            Time now = new Time();
+            now.setToNow();
+            Time launch = new Time();
+            launch.set(18, 11, 2015);
+            TextView countdownLabel = (TextView) getView().findViewById(R.id.countdownLabel);
+            long seconds = (launch.toMillis(true) - now.toMillis(true)) / 1000;
+            long minutes = seconds / 60;
+            long hours = minutes / 60;
+            long days = hours / 24;
+            String time = days + ":" + hours % 24 + ":" + minutes % 60 + ":" + seconds % 60;
+            Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/Star_Jedi_Rounded.ttf");
+            countdownLabel.setTypeface(tf);
+            countdownLabel.setTextColor(Color.parseColor("#FCDF2B"));
+            countdownLabel.setTextSize(50);
+            countdownLabel.setText(time);
+            h.postDelayed(this, delay);
+        }
+    };
 
     /**
      * Use this factory method to create a new instance of
@@ -102,27 +122,8 @@ public class CountdownFragment extends Fragment {
         secondTick();
     }
 
-    public void secondTick(){
-        h.postDelayed(new Runnable() {
-            public void run() {
-                Time now = new Time();
-                now.setToNow();
-                Time launch = new Time();
-                launch.set(18, 11, 2015);
-                TextView countdownLabel = (TextView) getView().findViewById(R.id.countdownLabel);
-                long seconds = (launch.toMillis(true) - now.toMillis(true)) / 1000;
-                long minutes = seconds / 60;
-                long hours = minutes / 60;
-                long days = hours / 24;
-                String time = days + ":" + hours % 24 + ":" + minutes % 60 + ":" + seconds % 60;
-                Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/Star_Jedi_Rounded.ttf");
-                countdownLabel.setTypeface(tf);
-                countdownLabel.setTextColor(Color.parseColor("#FCDF2B"));
-                countdownLabel.setTextSize(50);
-                countdownLabel.setText(time);
-                h.postDelayed(this, delay);
-            }
-        }, delay);
+    public void secondTick() {
+        h.postDelayed(myRunnable, delay);
     }
 
     @Override
@@ -137,6 +138,12 @@ public class CountdownFragment extends Fragment {
         if (mListener != null) {
             mListener.onCountdownFragmentInteraction(string);
         }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        h.removeCallbacks(myRunnable);
     }
 
     @Override

@@ -31,6 +31,8 @@
     <string name="emailBody">To Whom it may concern,</string>
 
     <string name="google_maps_key">AIzaSyB9NZY0wXxYbODuYgPH0FpBo-_2z9KPPGo</string>
+    <string name="google_maps_key_2">AIzaSyBxyOoPjiJwYr0CfeFtHufA3tUSMl7CAFc</string>
+    <string name="google_web_key">AIzaSyAVCIn3_43TvOKJFhBhgzY3LUhwTPTbVYs</string>
 
     <string name="no_location_detected">
         No location detected. Make sure location is enabled on the device.

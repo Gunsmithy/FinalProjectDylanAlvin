@@ -38,6 +38,8 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationServices;
 
+import java.util.Arrays;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity
         YouTubeFragment.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener,
         ConnectionCallbacks, OnConnectionFailedListener,
-        OnMapReadyCallback {
+        OnMapReadyCallback, PlacesListener {
 
     private GoogleMap mMap;
 
@@ -61,6 +63,8 @@ public class MainActivity extends AppCompatActivity
      * Represents a geographical location.
      */
     protected Location mLastLocation;
+
+    private String baseURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/xml?";
 
     private final Handler h = new Handler();
     private final int delay = 500; //milliseconds
@@ -264,6 +268,10 @@ public class MainActivity extends AppCompatActivity
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null) {
             Toast.makeText(this, String.valueOf(mLastLocation.getLatitude()) + String.valueOf(mLastLocation.getLongitude()), Toast.LENGTH_LONG).show();
+            String url = baseURL + "location=" + String.valueOf(mLastLocation.getLatitude()) + "," + String.valueOf(mLastLocation.getLongitude()) + "&radius=10000&types=movie_theater&key=" + getString(R.string.google_web_key);
+            DownloadPlacesTask downloadPlacesTask = new DownloadPlacesTask(this);
+            Log.d("FinalProject", "running task: " + url);
+            downloadPlacesTask.execute(url);
         } else {
             Toast.makeText(this, R.string.no_location_detected, Toast.LENGTH_LONG).show();
         }
@@ -295,5 +303,12 @@ public class MainActivity extends AppCompatActivity
         // attempt to re-establish the connection.
         Log.i(TAG, "Connection suspended");
         mGoogleApiClient.connect();
+    }
+
+    public void showPlaces(String[] places, String[] addresses, double[] lats, double[] longs) {
+        Log.i(TAG, "THESE PLACES: " + Arrays.toString(places));
+        Log.i(TAG, "THESE ADDRESSES: " + Arrays.toString(addresses));
+        Log.i(TAG, "THESE LATS: " + Arrays.toString(lats));
+        Log.i(TAG, "THESE LONGS: " + Arrays.toString(longs));
     }
 }

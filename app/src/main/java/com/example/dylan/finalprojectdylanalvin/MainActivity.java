@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.youtube.player.YouTubeApiServiceUtil;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 
@@ -310,5 +311,13 @@ public class MainActivity extends AppCompatActivity
         Log.i(TAG, "THESE ADDRESSES: " + Arrays.toString(addresses));
         Log.i(TAG, "THESE LATS: " + Arrays.toString(lats));
         Log.i(TAG, "THESE LONGS: " + Arrays.toString(longs));
+
+        mMap.clear();
+        for (int i = 0; i < places.length; i++){
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(lats[i],longs[i]))
+                    .title(places[i])
+                    .snippet(addresses[i]));
+        }
     }
 }

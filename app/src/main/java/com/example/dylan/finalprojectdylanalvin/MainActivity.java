@@ -1,11 +1,15 @@
 package com.example.dylan.finalprojectdylanalvin;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.format.Time;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.youtube.player.YouTubeApiServiceUtil;
@@ -38,14 +43,27 @@ import java.io.PrintWriter;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         CountdownFragment.OnFragmentInteractionListener,
-        FinderFragment.OnFragmentInteractionListener,
         TwitterFragment.OnFragmentInteractionListener,
         YouTubeFragment.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener,
-        FeedbackFragment.OnFragmentInteractionListener,
         OnMapReadyCallback{
 
     private GoogleMap mMap;
+
+    private final Handler h = new Handler();
+    private final int delay = 500; //milliseconds
+    //Runnable to check if the map fragment is loaded to avoid null pointer exception
+    private Runnable mapReadyCheck = new Runnable() {
+        public void run() {
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentByTag(getString(R.string.theatreFinder));
+            if (mapFragment != null) {
+                mapFragment.getMapAsync(MainActivity.this);
+                h.removeCallbacks(mapReadyCheck);
+            }
+            h.postDelayed(this, delay);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,8 +168,6 @@ public class MainActivity extends AppCompatActivity
                 title = getString(R.string.settings);
                 break;
             case R.id.nav_feedback:
-                //fragment = new FeedbackFragment();
-                //title = getString(R.string.feedback);
                 Intent Email = new Intent(Intent.ACTION_SEND);
                 Email.setType("text/email");
                 Email.putExtra(Intent.EXTRA_EMAIL, new String[] { getString(R.string.dylanEmail) });
@@ -171,15 +187,7 @@ public class MainActivity extends AppCompatActivity
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.content_frame, mMapFragment, title);
                 ft.commit();
-                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                        .findFragmentByTag(getString(R.string.theatreFinder));
-                System.out.println("HEREHEREHERE");
-                getSupportFragmentManager().dump("", null,
-                        new PrintWriter(System.out, true), null);
-                System.out.println("HEREHEREHERE");
-                if (mapFragment != null) {
-                    mapFragment.getMapAsync(this);
-                }
+                h.postDelayed(mapReadyCheck, delay);
             }
         }
 
@@ -198,22 +206,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onFinderFragmentInteraction(String string) {
-        // Do stuff
-        if (string.equals("LOADED")){
-            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                    .findFragmentByTag(getString(R.string.theatreFinder));
-            System.out.println("HEREHEREHERE");
-            getSupportFragmentManager().dump("", null,
-                    new PrintWriter(System.out, true), null);
-            System.out.println("HEREHEREHERE");
-            if (mapFragment != null) {
-                mapFragment.getMapAsync(this);
-            }
-        }
-    }
-
-    @Override
     public void onTwitterFragmentInteraction(String string) {
         // Do stuff
     }
@@ -225,11 +217,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onSettingsFragmentInteraction(String string) {
-        // Do stuff
-    }
-
-    @Override
-    public void onFeedbackFragmentInteraction(String string) {
         // Do stuff
     }
 

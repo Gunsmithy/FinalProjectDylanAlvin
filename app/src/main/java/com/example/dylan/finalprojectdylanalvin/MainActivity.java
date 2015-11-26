@@ -1,16 +1,12 @@
 package com.example.dylan.finalprojectdylanalvin;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.text.format.Time;
-import android.view.View;
+import android.util.Log;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,9 +15,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.youtube.player.YouTubeApiServiceUtil;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 
@@ -35,9 +31,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.PrintWriter;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.location.LocationServices;
 
 
 public class MainActivity extends AppCompatActivity
@@ -46,9 +45,22 @@ public class MainActivity extends AppCompatActivity
         TwitterFragment.OnFragmentInteractionListener,
         YouTubeFragment.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener,
-        OnMapReadyCallback{
+        ConnectionCallbacks, OnConnectionFailedListener,
+        OnMapReadyCallback {
 
     private GoogleMap mMap;
+
+    protected static final String TAG = "MainActivity";
+
+    /**
+     * Provides the entry point to Google Play services.
+     */
+    protected GoogleApiClient mGoogleApiClient;
+
+    /**
+     * Represents a geographical location.
+     */
+    protected Location mLastLocation;
 
     private final Handler h = new Handler();
     private final int delay = 500; //milliseconds
@@ -76,7 +88,7 @@ public class MainActivity extends AppCompatActivity
         final YouTubeInitializationResult result = YouTubeApiServiceUtil.isYouTubeApiServiceAvailable(this);
 
         if (result != YouTubeInitializationResult.SUCCESS) {
-            result.getErrorDialog(this,0).show();
+            result.getErrorDialog(this, 0).show();
         }
 
 
@@ -109,13 +121,12 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public final class Config
-    {
-        private Config()
-        {
-            final String YOUTUBE_API_KEY=" AIzaSyDr-JHyYE1xGBlkxgbJz0hBHqu5l7swx80";
+    public final class Config {
+        private Config() {
+            final String YOUTUBE_API_KEY = " AIzaSyDr-JHyYE1xGBlkxgbJz0hBHqu5l7swx80";
         }
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -148,7 +159,7 @@ public class MainActivity extends AppCompatActivity
         switch (viewId) {
             case R.id.nav_countdown:
                 fragment = new CountdownFragment();
-                title  = getString(R.string.countdownTimer);
+                title = getString(R.string.countdownTimer);
                 break;
             case R.id.nav_finder:
                 fragment = null;
@@ -170,7 +181,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_feedback:
                 Intent Email = new Intent(Intent.ACTION_SEND);
                 Email.setType("text/email");
-                Email.putExtra(Intent.EXTRA_EMAIL, new String[] { getString(R.string.dylanEmail) });
+                Email.putExtra(Intent.EXTRA_EMAIL, new String[]{getString(R.string.dylanEmail)});
                 Email.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.emailSubject));
                 Email.putExtra(Intent.EXTRA_TEXT, getString(R.string.emailBody) + "\n\n");
                 startActivity(Intent.createChooser(Email, getString(R.string.feedback)));
@@ -181,13 +192,13 @@ public class MainActivity extends AppCompatActivity
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment, title);
             ft.commit();
-        }
-        else{
-            if (mMapFragment != null){
+        } else {
+            if (mMapFragment != null) {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.content_frame, mMapFragment, title);
                 ft.commit();
                 h.postDelayed(mapReadyCheck, delay);
+                buildGoogleApiClient();
             }
         }
 
@@ -220,13 +231,69 @@ public class MainActivity extends AppCompatActivity
         // Do stuff
     }
 
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.setMyLocationEnabled(true);
+
+        mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+            @Override
+            public boolean onMyLocationButtonClick() {
+                updateLastLocation();
+                Log.e("Inside", "Click part");
+                LatLng ll = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 14);
+                mMap.animateCamera(update);
+                return true;
+            }
+        });
+
+        mGoogleApiClient.connect();
+    }
+
+    public void updateLastLocation(){
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (mLastLocation != null) {
+            Toast.makeText(this, String.valueOf(mLastLocation.getLatitude()) + String.valueOf(mLastLocation.getLongitude()), Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, R.string.no_location_detected, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * Runs when a GoogleApiClient object successfully connects.
+     */
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        // Provides a simple way of getting a device's location and is well suited for
+        // applications that do not require a fine-grained location and that do not need location
+        // updates. Gets the best and most recent location currently available, which may be null
+        // in rare cases when a location is not available.
+        updateLastLocation();
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        // Refer to the javadoc for ConnectionResult to see what error codes might be returned in
+        // onConnectionFailed.
+        Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
+    }
+
+
+    @Override
+    public void onConnectionSuspended(int cause) {
+        // The connection to Google Play services was lost for some reason. We call connect() to
+        // attempt to re-establish the connection.
+        Log.i(TAG, "Connection suspended");
+        mGoogleApiClient.connect();
     }
 }

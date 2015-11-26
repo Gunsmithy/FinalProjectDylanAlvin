@@ -32,4 +32,8 @@
 
     <string name="google_maps_key">AIzaSyB9NZY0wXxYbODuYgPH0FpBo-_2z9KPPGo</string>
 
+    <string name="no_location_detected">
+        No location detected. Make sure location is enabled on the device.
+    </string>
+
 </resources>

@@ -5,11 +5,13 @@ package com.example.dylan.finalprojectdylanalvin;
  */
 public class Trivia {
     private long id;
-    private String Name;
-
-    public Trivia(String NameCreated) {
+    private String question;
+    private String answer;
+    //Table for questions and answers
+    public Trivia(String Question, String Answer) {
         this.id = -1; // must be updated after the object is created
-        this.Name = NameCreated;
+        this.question = Question;
+        this.answer=Answer;
     }
 
     public long getId() {
@@ -20,15 +22,21 @@ public class Trivia {
         this.id = id;
     }
 
-    public String getNameCreated() {
-        return Name;
+    public String getQuestion() {
+        return question;
+    }
+    public void setQuestion(String Question){this.question=Question; }
+
+
+    public String getAnswer() {
+        return answer;
     }
 
-    public void setNameCreated(String NameCreated) {
-        this.Name = NameCreated;
-    }
+    public void setAnswer(String Answer){this.answer=Answer; }
 
     public String toString() {
-        return Name;
+        return question;
     }
+
+
 }

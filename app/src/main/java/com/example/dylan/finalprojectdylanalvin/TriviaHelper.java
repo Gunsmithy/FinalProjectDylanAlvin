@@ -14,16 +14,22 @@ import java.util.ArrayList;
  */
 public class TriviaHelper extends SQLiteOpenHelper{
     public static final int DATABASE_VERSION=1;
+    public static final int DATABASE_VERSION2=1;
     public static final String DATABASE_FILENAME= "trivia.db";
-    public static final String TABLE_NAME="Trivia Results";
+    public static final String DATABASE_FILENAME2= "score.db";
+    public static final String TABLE_NAME="Question and Answers";
+    public static final String TABLE_NAME2="scores";
 
-    public static final String CREATE_STATEMENT="CREATE TABLE " + TABLE_NAME+"("+" name created"+")";
+    public static final String CREATE_STATEMENT="CREATE TABLE " + TABLE_NAME+"("+" Questions"+"and Answers"+")";
     public static final String DROP_STATEMENT="DROP TABLE " + TABLE_NAME;
+    public static final String CREATE_STATEMENT2="CREATE TABLE " + TABLE_NAME2+"("+" name "+"and scores"+")";
+    public static final String DROP_STATEMENT2="DROP TABLE " + TABLE_NAME2;
 
 
     public TriviaHelper(Context context) {
         super(context, DATABASE_FILENAME, null, DATABASE_VERSION);
     }
+
 
     @Override
     public void onCreate(SQLiteDatabase database) {
@@ -32,24 +38,20 @@ public class TriviaHelper extends SQLiteOpenHelper{
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-        // the implementation below is adequate for the first version
-        // however, if we change our table at all, we'd need to execute code to move the data
-        // to the new table structure, then delete the old tables (renaming the new ones)
-
-        // the current version destroys all existing data
         database.execSQL(DROP_STATEMENT);
         database.execSQL(CREATE_STATEMENT);
     }
-    public Trivia createTrivia(String Name) {
+    public Trivia createTrivia(String Question, String Answer) {
         // create the object
-        Trivia trivia = new Trivia(Name);
+        Trivia trivia = new Trivia(Question, Answer);
 
         // obtain a database connection
         SQLiteDatabase database = this.getWritableDatabase();
 
         // insert the data into the database
         ContentValues values = new ContentValues();
-        values.put("Name", trivia.getNameCreated());
+        values.put("Question", trivia.getQuestion());
+        values.put("Answer", trivia.getAnswer());
         long id = database.insert(TABLE_NAME, null, values);
 
         // assign the Id of the new database row as the Id of the object
@@ -64,17 +66,18 @@ public class TriviaHelper extends SQLiteOpenHelper{
         // obtain a database connection
         SQLiteDatabase database = this.getWritableDatabase();
 
-        // retrieve the name from the database
-        String[] columns = new String[] { "Name Created"};
+        // retrieve the question and answer from the database
+        String[] columns = new String[] { "question","answer"};
         Cursor cursor = database.query(TABLE_NAME, columns, "_id = ?", new String[]{"" + id}, "", "", "");
         if (cursor.getCount() >= 1) {
             cursor.moveToFirst();
-            String NameCreated = cursor.getString(0);
-            trivia = new Trivia(NameCreated);
+            String Question = cursor.getString(0);
+            String Answer = cursor.getString(1);
+            trivia = new Trivia(Question,Answer);
             trivia.setId(id);
         }
 
-        Log.i("DatabaseAccess", "getTrivia(" + id + "):  name: " + trivia);
+        Log.i("DatabaseAccess", "getTrivia(" + id + "):  Question: " + trivia);
 
         return trivia;
     }
@@ -85,25 +88,26 @@ public class TriviaHelper extends SQLiteOpenHelper{
         // obtain a database connection
         SQLiteDatabase database = this.getWritableDatabase();
 
-        // retrieve the name from the database
-        String[] columns = new String[] { "_id", "Name"};
+        // retrieve the question and answer from the database
+        String[] columns = new String[] { "_id", "Question", "Answser"};
         Cursor cursor = database.query(TABLE_NAME, columns, "", new String[]{}, "", "", "");
         cursor.moveToFirst();
         do {
-            // collect the Name data, and place it into a Name object
+            // collect the Question and answer data, and place it into 2 objects
             long id = Long.parseLong(cursor.getString(0));
-            String NameCreated = cursor.getString(1);
-            Trivia trivia = new Trivia(NameCreated);
+            String Question = cursor.getString(1);
+            String Answer = cursor.getString(2);
+            Trivia trivia = new Trivia(Question,Answer);
             trivia.setId(id);
 
-            // add the current Name to the list
+            // add the current Question to the list
             trivias.add(trivia);
 
             // advance to the next row in the results
             cursor.moveToNext();
         } while (!cursor.isAfterLast());
 
-        Log.i("DatabaseAccess", "getAllNamess():  num: " + trivias.size());
+        Log.i("DatabaseAccess", "getAllQuestions():  num: " + trivias.size());
 
         return trivias;
     }
@@ -113,34 +117,13 @@ public class TriviaHelper extends SQLiteOpenHelper{
 
         // update the data in the database
         ContentValues values = new ContentValues();
-        values.put("firstName", trivia.getNameCreated());
+        values.put("Question", trivia.getQuestion());
         int numRowsAffected = database.update(TABLE_NAME, values, "_id = ?", new String[]{"" + trivia.getId()});
 
-        Log.i("DatabaseAccess", "updateName(" + trivia + "):  numRowsAffected: " + numRowsAffected);
+        Log.i("DatabaseAccess", "updateQuestion(" + trivia + "):  numRowsAffected: " + numRowsAffected);
 
-        // verify that the name was updated successfully
-        return (numRowsAffected == 1);
-    }
-    public boolean deleteTrivia(long id) {
-        // obtain a database connection
-        SQLiteDatabase database = this.getWritableDatabase();
-
-        // delete the name
-        int numRowsAffected = database.delete(TABLE_NAME, "_id = ?", new String[] { "" + id });
-
-        Log.i("DatabaseAccess", "deleteName(" + id + "):  numRowsAffected: " + numRowsAffected);
-
-        // verify that the name was deleted successfully
+        // verify that the Question and Answer was updated successfully
         return (numRowsAffected == 1);
     }
 
-    public void deleteAllTrivias() {
-        // obtain a database connection
-        SQLiteDatabase database = this.getWritableDatabase();
-
-        // delete the name
-        int numRowsAffected = database.delete(TABLE_NAME, "", new String[] {});
-
-        Log.i("DatabaseAccess", "deleteAllNames():  numRowsAffected: " + numRowsAffected);
-    }
 }

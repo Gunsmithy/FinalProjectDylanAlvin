@@ -22,8 +22,48 @@
         android:text="Trivia"
         android:id="@+id/textView3"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Answer1"
+        android:id="@+id/answer1Button"
+        android:layout_marginTop="71dp"
+        android:layout_below="@+id/buttonStart"
+        android:layout_toLeftOf="@+id/buttonStart"
+        android:layout_toStartOf="@+id/buttonStart"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Answer2"
+        android:id="@+id/answer2Button"
+        android:layout_alignTop="@+id/answer1Button"
+        android:layout_toRightOf="@+id/buttonStart"
+        android:layout_toEndOf="@+id/buttonStart"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Enter Name and Press the Start button to start"
+        android:id="@+id/textView5"
+        android:layout_below="@+id/textView3"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="84dp" />
+        android:layout_marginTop="57dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Name"
+        android:ems="10"
+        android:id="@+id/NameText"
+        android:layout_below="@+id/textView5"
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>

@@ -33,11 +33,11 @@ public class TriviaFragment extends Fragment     {
     TriviaHelper dbHelper = new TriviaHelper(this);
     dbHelper.deleteAllTrivia();
 
-    Trivia one = dbHelper.createTrivia("Bob");
-    Trivia two = dbHelper.createTrivia("Jane");
-    Trivia three = dbHelper.createTrivia("Luis");
-    Trivia four = dbHelper.createTrivia("Natasha");
-    Trivia five = dbHelper.createTrivia("Tobe");
+    Trivia one = dbHelper.createTrivia("Question1","Answer1");
+    Trivia two = dbHelper.createTrivia("Question2","Answer2");
+    Trivia three = dbHelper.createTrivia("Question3","Answer3");
+    Trivia four = dbHelper.createTrivia("Question4","Answer4");
+    Trivia five = dbHelper.createTrivia("Question5","Answer5");
 */
 
 
@@ -90,7 +90,13 @@ public class TriviaFragment extends Fragment     {
         // GETTING BUTTON TO WORK
         View view = inflater.inflate(R.layout.fragment_trivia,
                 container, false);
+
         Button button = (Button) view.findViewById(R.id.buttonStart);
+        final Button a1button = (Button) view.findViewById(R.id.answer1Button);
+        final Button a2button = (Button) view.findViewById(R.id.answer2Button);
+
+        a1button.setVisibility(View.GONE);
+        a2button.setVisibility(View.GONE);
         button.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -98,6 +104,8 @@ public class TriviaFragment extends Fragment     {
             {
                 Button button = (Button) v;
                 button.setVisibility(View.GONE);
+                a1button.setVisibility(View.VISIBLE);
+                a2button.setVisibility(View.VISIBLE);
             }
         });
         return view;

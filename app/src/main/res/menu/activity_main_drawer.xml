@@ -10,6 +10,8 @@
             android:title="@string/twitterFeed" />
         <item android:id="@+id/nav_youtube" android:icon="@android:drawable/ic_menu_slideshow"
             android:title="@string/youTubeFeed" />
+        <item android:id="@+id/nav_trivia" android:icon="@android:drawable/ic_menu_more"
+            android:title="@string/triviapage"/>
     </group>
 
     <group android:id="@+id/menu_bottom" android:checkableBehavior="single">

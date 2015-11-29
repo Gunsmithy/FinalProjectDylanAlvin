@@ -179,6 +179,10 @@ public class MainActivity extends AppCompatActivity
                 fragment = new YouTubeFragment();
                 title = getString(R.string.youTubeFeed);
                 break;
+            case R.id.nav_trivia:
+                fragment = new TriviaFragment();
+                title = getString(R.string.triviapage);
+                break;
             case R.id.nav_settings:
                 fragment = new SettingsFragment();
                 title = getString(R.string.settings);

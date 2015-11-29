@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 
 /**
@@ -18,6 +21,26 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class TriviaFragment extends Fragment {
+
+    /*
+    private ArrayList<Trivia> trivia = null;
+    private int triviaIndex = -1;
+
+    TextView resultField = (TextView)findViewById(R.id.lblResult);
+
+
+    TriviaHelper dbHelper = new TriviaHelper(this);
+    dbHelper.deleteAllTrivia();
+
+    Trivia one = dbHelper.createTrivia("Bob");
+    Trivia two = dbHelper.createTrivia("Jane");
+    Trivia three = dbHelper.createTrivia("Luis");
+    Trivia four = dbHelper.createTrivia("Natasha");
+    Trivia five = dbHelper.createTrivia("Tobe");
+*/
+
+
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -35,11 +58,11 @@ public class TriviaFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment TwitterFragment.
+     * @return A new instance of fragment TriviaFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TwitterFragment newInstance(String param1, String param2) {
-        TwitterFragment fragment = new TwitterFragment();
+    public static TriviaFragment newInstance(String param1, String param2) {
+        TriviaFragment fragment = new TriviaFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -64,13 +87,13 @@ public class TriviaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_twitter, container, false);
+        return inflater.inflate(R.layout.fragment_trivia, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(String string) {
         if (mListener != null) {
-            mListener.onTwitterFragmentInteraction(string);
+            mListener.onTriviaFragmentInteraction(string);
         }
     }
 
@@ -92,6 +115,8 @@ public class TriviaFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onTwitterFragmentInteraction(String string);
+        void onTriviaFragmentInteraction(String string);
     }
+
+
 }

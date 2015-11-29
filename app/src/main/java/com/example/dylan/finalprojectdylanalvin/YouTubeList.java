@@ -14,10 +14,6 @@ import com.google.android.youtube.player.YouTubeThumbnailView;
 
 import java.util.HashMap;
 import java.util.Map;
-
-/**
- * COPY AND PASTED. NEED TO LOOK AT
- */
 public class YouTubeList extends BaseAdapter implements YouTubeThumbnailView.OnInitializedListener {
 
     private Context mContext;

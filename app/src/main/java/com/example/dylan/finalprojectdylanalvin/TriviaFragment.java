@@ -23,22 +23,6 @@ import java.util.ArrayList;
  */
 public class TriviaFragment extends Fragment     {
 
-    /*
-    private ArrayList<Trivia> trivia = null;
-    private int triviaIndex = -1;
-
-    TextView resultField = (TextView)findViewById(R.id.lblResult);
-
-
-    TriviaHelper dbHelper = new TriviaHelper(this);
-    dbHelper.deleteAllTrivia();
-
-    Trivia one = dbHelper.createTrivia("Question1","Answer1");
-    Trivia two = dbHelper.createTrivia("Question2","Answer2");
-    Trivia three = dbHelper.createTrivia("Question3","Answer3");
-    Trivia four = dbHelper.createTrivia("Question4","Answer4");
-    Trivia five = dbHelper.createTrivia("Question5","Answer5");
-*/
 
 
 
@@ -139,6 +123,51 @@ public class TriviaFragment extends Fragment     {
         // TODO: Update argument type and name
         void onTriviaFragmentInteraction(String string);
     }
+
+
+    /*
+    private ArrayList<Trivia> trivia = null;
+    private int triviaIndex = -1;
+
+    TextView resultField = (TextView)findViewById(R.id.lblResult);
+
+
+    TriviaHelper dbHelper = new TriviaHelper(this);
+    dbHelper.deleteAllTrivia();
+
+    Trivia one = dbHelper.createTrivia("Question1","Answer1");
+    Trivia two = dbHelper.createTrivia("Question2","Answer2");
+    Trivia three = dbHelper.createTrivia("Question3","Answer3");
+    Trivia four = dbHelper.createTrivia("Question4","Answer4");
+    Trivia five = dbHelper.createTrivia("Question5","Answer5");
+
+    private void nextQuestion(View v)
+    {
+    nextQuestion();
+    }
+
+    private void nextQuestion()
+    {
+    this.triviaIndex++
+
+    if (this.triviaIndex>=this.trivia.size())
+    {
+    this.contactIndex=0;
+    }
+        display(this.trivia.get(this.triviaIndex));
+    }
+
+    private void display(Trivia trivia)
+    {
+    TextView Question=(TextView)findViewById(R.id.InstructionsQuestions);
+
+    Question.setText(trivia.getQuestion());
+    a1button.setText(trivia.getAnswer());
+    a2button.setText(Trivia.getAnswer());
+
+    }
+
+*/
 
 
 }

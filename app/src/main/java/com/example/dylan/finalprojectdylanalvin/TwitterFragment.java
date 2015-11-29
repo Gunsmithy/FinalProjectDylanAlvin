@@ -95,4 +95,5 @@ public class TwitterFragment extends Fragment {
         void onTwitterFragmentInteraction(String string);
     }
 
+
 }

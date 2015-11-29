@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
  * Use the {@link TriviaFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TriviaFragment extends Fragment {
+public class TriviaFragment extends Fragment     {
 
     /*
     private ArrayList<Trivia> trivia = null;
@@ -86,8 +87,20 @@ public class TriviaFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_trivia, container, false);
+        // GETTING BUTTON TO WORK
+        View view = inflater.inflate(R.layout.fragment_trivia,
+                container, false);
+        Button button = (Button) view.findViewById(R.id.buttonStart);
+        button.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Button button = (Button) v;
+                button.setVisibility(View.GONE);
+            }
+        });
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -102,6 +115,7 @@ public class TriviaFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
 
     /**
      * This interface must be implemented by activities that contain this

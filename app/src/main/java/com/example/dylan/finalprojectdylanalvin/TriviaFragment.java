@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -81,15 +82,18 @@ public class TriviaFragment extends Fragment     {
 
         a1button.setVisibility(View.GONE);
         a2button.setVisibility(View.GONE);
-        button.setOnClickListener(new View.OnClickListener()
-        {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
+                TextView textviewName= (TextView) getView().findViewById(R.id.NameText);
+                EditText name = (EditText) getView().findViewById(R.id.NameText);
+                name.getText().toString();
                 Button button = (Button) v;
                 button.setVisibility(View.GONE);
                 a1button.setVisibility(View.VISIBLE);
                 a2button.setVisibility(View.VISIBLE);
+                textviewName.setVisibility(View.GONE);
+
             }
         });
         return view;
@@ -135,11 +139,11 @@ public class TriviaFragment extends Fragment     {
     TriviaHelper dbHelper = new TriviaHelper(this);
     dbHelper.deleteAllTrivia();
 
-    Trivia one = dbHelper.createTrivia("Question1","Answer1");
-    Trivia two = dbHelper.createTrivia("Question2","Answer2");
-    Trivia three = dbHelper.createTrivia("Question3","Answer3");
-    Trivia four = dbHelper.createTrivia("Question4","Answer4");
-    Trivia five = dbHelper.createTrivia("Question5","Answer5");
+    Trivia one = dbHelper.createTrivia("Question1","Answer1","False");
+    Trivia two = dbHelper.createTrivia("Question2","Answer2","False");
+    Trivia three = dbHelper.createTrivia("Question3","Answer3","False");
+    Trivia four = dbHelper.createTrivia("Question4","Answer4","False");
+    Trivia five = dbHelper.createTrivia("Question5","Answer5","False");
 
     private void nextQuestion(View v)
     {

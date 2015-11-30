@@ -7,11 +7,13 @@ public class Trivia {
     private long id;
     private String question;
     private String answer;
+    private String falseAnswer;
     //Table for questions and answers
-    public Trivia(String Question, String Answer) {
+    public Trivia(String Question, String Answer, String FalseAnswer) {
         this.id = -1; // must be updated after the object is created
         this.question = Question;
         this.answer=Answer;
+        this.falseAnswer=FalseAnswer;
     }
 
     public long getId() {
@@ -36,6 +38,13 @@ public class Trivia {
 
     public String toString() {
         return question;
+    }
+
+    public void setFalseAnswer(String FalseAnswer){this.falseAnswer=FalseAnswer;}
+
+    public String getFalseAnswer()
+    {
+        return falseAnswer;
     }
 
 

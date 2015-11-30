@@ -41,9 +41,9 @@ public class TriviaHelper extends SQLiteOpenHelper{
         database.execSQL(DROP_STATEMENT);
         database.execSQL(CREATE_STATEMENT);
     }
-    public Trivia createTrivia(String Question, String Answer) {
+    public Trivia createTrivia(String Question, String Answer, String FalseAnswer) {
         // create the object
-        Trivia trivia = new Trivia(Question, Answer);
+        Trivia trivia = new Trivia(Question, Answer, FalseAnswer);
 
         // obtain a database connection
         SQLiteDatabase database = this.getWritableDatabase();
@@ -52,6 +52,7 @@ public class TriviaHelper extends SQLiteOpenHelper{
         ContentValues values = new ContentValues();
         values.put("Question", trivia.getQuestion());
         values.put("Answer", trivia.getAnswer());
+        values.put("FalseAnswer", trivia.getFalseAnswer());
         long id = database.insert(TABLE_NAME, null, values);
 
         // assign the Id of the new database row as the Id of the object
@@ -67,13 +68,14 @@ public class TriviaHelper extends SQLiteOpenHelper{
         SQLiteDatabase database = this.getWritableDatabase();
 
         // retrieve the question and answer from the database
-        String[] columns = new String[] { "question","answer"};
+        String[] columns = new String[] { "question","answer", "false answer"};
         Cursor cursor = database.query(TABLE_NAME, columns, "_id = ?", new String[]{"" + id}, "", "", "");
         if (cursor.getCount() >= 1) {
             cursor.moveToFirst();
             String Question = cursor.getString(0);
             String Answer = cursor.getString(1);
-            trivia = new Trivia(Question,Answer);
+            String FalseAnswer= cursor.getString(2);
+            trivia = new Trivia(Question,Answer,FalseAnswer);
             trivia.setId(id);
         }
 
@@ -89,7 +91,7 @@ public class TriviaHelper extends SQLiteOpenHelper{
         SQLiteDatabase database = this.getWritableDatabase();
 
         // retrieve the question and answer from the database
-        String[] columns = new String[] { "_id", "Question", "Answser"};
+        String[] columns = new String[] { "_id", "Question", "Answser", "False Answer"};
         Cursor cursor = database.query(TABLE_NAME, columns, "", new String[]{}, "", "", "");
         cursor.moveToFirst();
         do {
@@ -97,7 +99,8 @@ public class TriviaHelper extends SQLiteOpenHelper{
             long id = Long.parseLong(cursor.getString(0));
             String Question = cursor.getString(1);
             String Answer = cursor.getString(2);
-            Trivia trivia = new Trivia(Question,Answer);
+            String FalseAnswer=cursor.getString(3);
+            Trivia trivia = new Trivia(Question,Answer,FalseAnswer);
             trivia.setId(id);
 
             // add the current Question to the list

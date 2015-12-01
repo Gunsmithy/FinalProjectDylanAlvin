@@ -25,7 +25,7 @@
     <string name="settingsDefault">Settings go here</string>
     <string name="feedbackDefault">An email activity prompt and stuff goes here</string>
 
-    <string name="video_list_title">This string was missing from commit</string>
+    <string name="video_list_title">Video Title</string>
     <string name="player_error">Error Initializing Player</string>
 
     <string name="emailSubject">Star Wars Hype App Feedback</string>

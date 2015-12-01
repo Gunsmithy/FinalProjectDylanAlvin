@@ -1,13 +1,18 @@
 package com.example.dylan.finalprojectdylanalvin;
 
 import android.app.Activity;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.MediaController;
+import android.widget.VideoView;
 
 
 /**
@@ -59,6 +64,8 @@ public class YouTubeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
     @Override
@@ -66,6 +73,30 @@ public class YouTubeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_you_tube, container, false);
+        /*
+        SurfaceView surface=(SurfaceView) getView().findViewById(R.id.surfaceView);
+        holder = surface.getHolder();
+*/
+
+        VideoView vid=(VideoView) getView().findViewById(R.id.VideoTrailer);
+        MediaPlayer player= new MediaPlayer();
+        AssetManager assetManager = context.getAssets();
+        AssetFileDescriptor videoFd;
+
+        player.setDataSource();
+        vid.setVideoPath("/assets/video/Star Wars- The Force Awakens Trailer (Official).mp4");
+        vid.setMediaController(new MediaController(this));
+        vid.start();
+
+        if (player == null) {
+            player = new MediaPlayer();
+            player.setScreenOnWhilePlaying(true);
+        } else {
+            player.stop();
+            player.reset();
+        }
+
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

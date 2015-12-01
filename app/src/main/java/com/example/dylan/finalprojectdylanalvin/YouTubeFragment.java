@@ -3,14 +3,18 @@ package com.example.dylan.finalprojectdylanalvin;
 import android.app.Activity;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
@@ -24,6 +28,8 @@ import android.widget.VideoView;
  * create an instance of this fragment.
  */
 public class YouTubeFragment extends Fragment {
+    private SurfaceView surface = null;
+    private SurfaceHolder holder = null;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -73,30 +79,51 @@ public class YouTubeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_you_tube, container, false);
-        /*
-        SurfaceView surface=(SurfaceView) getView().findViewById(R.id.surfaceView);
-        holder = surface.getHolder();
+/*                                                                                      -------------supposed to use this not setcontent view
+        View rootView = inflater.inflate(R.layout.about_screeen, container, false);
+        return rootView;
 */
 
-        VideoView vid=(VideoView) getView().findViewById(R.id.VideoTrailer);
-        MediaPlayer player= new MediaPlayer();
-        AssetManager assetManager = context.getAssets();
-        AssetFileDescriptor videoFd;
+    }
+    private MediaPlayer player;
 
-        player.setDataSource();
-        vid.setVideoPath("/assets/video/Star Wars- The Force Awakens Trailer (Official).mp4");
-        vid.setMediaController(new MediaController(this));
-        vid.start();
+    public void downloadAndPlayVideo(View view) {
+        String url = "https://www.youtube.com/watch?v=sGbxmsDFVnE";
+        //setContentView(R.layout.activity_play_video);
 
-        if (player == null) {
-            player = new MediaPlayer();
-            player.setScreenOnWhilePlaying(true);
-        } else {
-            player.stop();
-            player.reset();
+        surface = (SurfaceView)getView().findViewById(R.id.surfaceView);
+        holder = surface.getHolder();
+
+        try {
+            if (player == null) {
+                player = new MediaPlayer();
+                player.setScreenOnWhilePlaying(true);
+            } else {
+                player.stop();
+                player.reset();
+            }
+
+            Log.d("VideoPlayer", "Downloading video...");
+            player.setDataSource(url);
+            player.setDisplay(holder);
+            player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    int width=player.getVideoWidth();
+                    int height=player.getVideoHeight();
+
+                    if ((width != 0) && (height != 0)) {
+                        holder.setFixedSize(width, height);
+                        Log.d("VideoPlayer", "Playing video...");
+                        player.start();
+                    }
+                }
+            });
+            player.prepareAsync();
+        } catch (Exception e) {
+            Log.e("VideoPlayer", "Exception:", e);
         }
-
-
     }
 
     // TODO: Rename method, update argument and hook method into UI event

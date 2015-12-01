@@ -90,6 +90,8 @@ public class TriviaFragment extends Fragment     {
                 name.getText().toString();
                 Button button = (Button) v;
                 button.setVisibility(View.GONE);
+
+                //button changes postion when visibility changes
                 a1button.setVisibility(View.VISIBLE);
                 a2button.setVisibility(View.VISIBLE);
                 textviewName.setVisibility(View.GONE);
@@ -129,14 +131,14 @@ public class TriviaFragment extends Fragment     {
     }
 
 
-    /*
+
     private ArrayList<Trivia> trivia = null;
     private int triviaIndex = -1;
+/*
+    TextView resultField = (TextView)getView().findViewById(R.id.InstructionsQuestions);
 
-    TextView resultField = (TextView)findViewById(R.id.lblResult);
 
-
-    TriviaHelper dbHelper = new TriviaHelper(this);
+    TriviaHelper dbHelper = new TriviaHelper(getActivity());
     dbHelper.deleteAllTrivia();
 
     Trivia one = dbHelper.createTrivia("Question1","Answer1","False");
@@ -156,18 +158,18 @@ public class TriviaFragment extends Fragment     {
 
     if (this.triviaIndex>=this.trivia.size())
     {
-    this.contactIndex=0;
+    this.triviaIndex=0;
     }
         display(this.trivia.get(this.triviaIndex));
     }
 
     private void display(Trivia trivia)
     {
-    TextView Question=(TextView)findViewById(R.id.InstructionsQuestions);
+    TextView Question=(TextView)getView()findViewById(R.id.InstructionsQuestions);
 
     Question.setText(trivia.getQuestion());
     a1button.setText(trivia.getAnswer());
-    a2button.setText(Trivia.getAnswer());
+    a2button.setText(Trivia.getFalseAnswer());
 
     }
 

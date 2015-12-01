@@ -36,10 +36,6 @@ public class Trivia {
 
     public void setAnswer(String Answer){this.answer=Answer; }
 
-    public String toString() {
-        return question;
-    }
-
     public void setFalseAnswer(String FalseAnswer){this.falseAnswer=FalseAnswer;}
 
     public String getFalseAnswer()
@@ -47,5 +43,9 @@ public class Trivia {
         return falseAnswer;
     }
 
+
+    public String toString() {
+        return question;
+    }
 
 }

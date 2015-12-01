@@ -1,5 +1,7 @@
 package com.example.dylan.finalprojectdylanalvin;
 
+//By Dylan, some additions by Alvin
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -39,8 +41,6 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        CountdownFragment.OnFragmentInteractionListener,
-        TwitterFragment.OnFragmentInteractionListener,
         YouTubeFragment.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener,
         ConnectionCallbacks, OnConnectionFailedListener,
@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity
 
     private GoogleMap mMap;
 
+    //Radius in meters to search for theatres
     private int radiusSetting;
 
     protected static final String TAG = "MainActivity";
@@ -91,6 +92,7 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences prefs = getSharedPreferences(name, Activity.MODE_PRIVATE);
         radiusSetting = prefs.getInt("radiusSetting", 10000);
 
+        //Load the navigation drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -100,6 +102,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //Countdown is the default view
         displayView(R.id.nav_countdown);
     }
 
@@ -126,6 +129,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    //When settings is pressed in options menu, load settings
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -142,6 +146,7 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    //When a nav tray item is pressed, call display to figure out which one
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -155,6 +160,7 @@ public class MainActivity extends AppCompatActivity
         SupportMapFragment mMapFragment = null;
         String title = getString(R.string.app_name);
 
+        //Load the fragment which was pressed
         switch (viewId) {
             case R.id.nav_countdown:
                 fragment = new CountdownFragment();
@@ -164,10 +170,6 @@ public class MainActivity extends AppCompatActivity
                 fragment = null;
                 mMapFragment = SupportMapFragment.newInstance();
                 title = getString(R.string.theatreFinder);
-                break;
-            case R.id.nav_twitter:
-                fragment = new TwitterFragment();
-                title = getString(R.string.twitterFeed);
                 break;
             case R.id.nav_youtube:
                 fragment = new YouTubeFragment();
@@ -194,11 +196,14 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
 
+        //As long as the fragment isn't null, replace the placeholder one with one selected
         if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment, title);
             ft.commit();
-        } else {
+        }
+        //If the fragment is null it could have been the map selected, if it was, load that
+        else {
             if (mMapFragment != null) {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.content_frame, mMapFragment, title);
@@ -213,18 +218,9 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setTitle(title);
         }
 
+        //Close the drawer when done
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-    }
-
-    @Override
-    public void onCountdownFragmentInteraction(String string) {
-        // Do stuff
-    }
-
-    @Override
-    public void onTwitterFragmentInteraction(String string) {
-        // Do stuff
     }
 
     @Override
@@ -232,10 +228,16 @@ public class MainActivity extends AppCompatActivity
         // Do stuff
     }
 
+    //When the settings fragment stops, update the radius setting
     @Override
     public void onSettingsFragmentInteraction(String string) {
         // Do stuff
         radiusSetting = Integer.valueOf(string);
+        String name = "myAppPrefs";
+        SharedPreferences prefs = getSharedPreferences(name, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("radiusSetting", radiusSetting);
+        editor.apply();
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -246,6 +248,7 @@ public class MainActivity extends AppCompatActivity
                 .build();
     }
 
+    //When map is ready, set the map object, load the current location marker, and configure the button
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -256,10 +259,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public boolean onMyLocationButtonClick() {
                 updateLastLocation();
-                Log.e("Inside", "Click part");
-                LatLng ll = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 14);
-                mMap.animateCamera(update);
                 return true;
             }
         });
@@ -267,10 +266,14 @@ public class MainActivity extends AppCompatActivity
         mGoogleApiClient.connect();
     }
 
+    //Checks for the devices last known location
     public void updateLastLocation(){
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null) {
-            Toast.makeText(this, String.valueOf(mLastLocation.getLatitude()) + String.valueOf(mLastLocation.getLongitude()), Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, String.valueOf(mLastLocation.getLatitude()) + String.valueOf(mLastLocation.getLongitude()), Toast.LENGTH_LONG).show();
+            LatLng ll = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 14);
+            mMap.animateCamera(update);
             String url = baseURL + "location=" + String.valueOf(mLastLocation.getLatitude()) + "," + String.valueOf(mLastLocation.getLongitude()) + "&radius=" + String.valueOf(radiusSetting) +"&types=movie_theater&key=" + getString(R.string.google_web_key);
             DownloadPlacesTask downloadPlacesTask = new DownloadPlacesTask(this);
             Log.d("FinalProject", "running task: " + url);
@@ -308,11 +311,19 @@ public class MainActivity extends AppCompatActivity
         mGoogleApiClient.connect();
     }
 
+    //Clears the map of theatre locations and displays the new set, notifying of the result
     public void showPlaces(String[] places, String[] addresses, double[] lats, double[] longs) {
         Log.i(TAG, "THESE PLACES: " + Arrays.toString(places));
         Log.i(TAG, "THESE ADDRESSES: " + Arrays.toString(addresses));
         Log.i(TAG, "THESE LATS: " + Arrays.toString(lats));
         Log.i(TAG, "THESE LONGS: " + Arrays.toString(longs));
+
+        if (places.length > 0){
+            Toast.makeText(this, R.string.placesFound, Toast.LENGTH_LONG).show();
+        }
+        else{
+            Toast.makeText(this, R.string.noPlacesFound, Toast.LENGTH_LONG).show();
+        }
 
         mMap.clear();
         for (int i = 0; i < places.length; i++){

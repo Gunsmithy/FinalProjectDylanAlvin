@@ -1,5 +1,7 @@
 package com.example.dylan.finalprojectdylanalvin;
 
+//By Alvin
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -9,9 +11,6 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-/**
- * Created by 100484342 on 23/11/2015.
- */
 public class TriviaHelper extends SQLiteOpenHelper{
     public static final int DATABASE_VERSION=1;
     public static final int DATABASE_VERSION2=1;

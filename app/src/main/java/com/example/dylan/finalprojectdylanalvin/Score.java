@@ -1,8 +1,7 @@
 package com.example.dylan.finalprojectdylanalvin;
 
-/**
- * Created by Gamma on 11/29/2015.
- */
+//By Alvin
+
 public class Score {
     private long id;
     private String name;

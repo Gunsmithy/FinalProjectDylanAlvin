@@ -1,8 +1,7 @@
 package com.example.dylan.finalprojectdylanalvin;
 
-/**
- * Created by 100484342 on 23/11/2015.
- */
+//By Alvin
+
 public class Trivia {
     private long id;
     private String question;

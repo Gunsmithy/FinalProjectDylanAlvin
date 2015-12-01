@@ -6,8 +6,6 @@
             android:title="@string/countdownTimer" />
         <item android:id="@+id/nav_finder" android:icon="@android:drawable/ic_menu_compass"
             android:title="@string/theatreFinder" />
-        <item android:id="@+id/nav_twitter" android:icon="@android:drawable/ic_menu_share"
-            android:title="@string/twitterFeed" />
         <item android:id="@+id/nav_youtube" android:icon="@android:drawable/ic_menu_slideshow"
             android:title="@string/youTubeFeed" />
         <item android:id="@+id/nav_trivia" android:icon="@android:drawable/ic_menu_more"

@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 
 /**
@@ -27,6 +29,8 @@ public class SettingsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private int radius;
 
     private OnFragmentInteractionListener mListener;
 
@@ -50,6 +54,15 @@ public class SettingsFragment extends Fragment {
 
     public SettingsFragment() {
         // Required empty public constructor
+        radius = 0;
+    }
+
+    public void setmListener(OnFragmentInteractionListener listener){
+        this.mListener = listener;
+    }
+
+    public void setRadius(int radius){
+        this.radius = radius;
     }
 
     @Override
@@ -67,15 +80,20 @@ public class SettingsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings,
                 container, false);
         Button button1 = (Button) view.findViewById(R.id.SomethingButton);
-        button1.setOnClickListener(new View.OnClickListener()
-        {
+        button1.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 //does something
             }
         });
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        EditText radiusText = (EditText) getView().findViewById(R.id.radiusText);
+        radiusText.setText(String.valueOf(this.radius));
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -83,6 +101,13 @@ public class SettingsFragment extends Fragment {
         if (mListener != null) {
             mListener.onSettingsFragmentInteraction(string);
         }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EditText radiusText = (EditText) getView().findViewById(R.id.radiusText);
+        mListener.onSettingsFragmentInteraction(radiusText.getText().toString());
     }
 
     @Override

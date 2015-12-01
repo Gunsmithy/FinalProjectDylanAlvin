@@ -1,6 +1,8 @@
 package com.example.dylan.finalprojectdylanalvin;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,6 +48,8 @@ public class MainActivity extends AppCompatActivity
 
     private GoogleMap mMap;
 
+    private int radiusSetting;
+
     protected static final String TAG = "MainActivity";
 
     /**
@@ -82,6 +86,10 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //Load the saved app state from preferences, if none, default to 0
+        String name = "myAppPrefs";
+        SharedPreferences prefs = getSharedPreferences(name, Activity.MODE_PRIVATE);
+        radiusSetting = prefs.getInt("radiusSetting", 10000);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -171,6 +179,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_settings:
                 fragment = new SettingsFragment();
+                SettingsFragment sFragment = (SettingsFragment) fragment;
+                sFragment.setmListener(this);
+                sFragment.setRadius(radiusSetting);
                 title = getString(R.string.settings);
                 break;
             case R.id.nav_feedback:
@@ -224,6 +235,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onSettingsFragmentInteraction(String string) {
         // Do stuff
+        radiusSetting = Integer.valueOf(string);
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -259,7 +271,7 @@ public class MainActivity extends AppCompatActivity
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null) {
             Toast.makeText(this, String.valueOf(mLastLocation.getLatitude()) + String.valueOf(mLastLocation.getLongitude()), Toast.LENGTH_LONG).show();
-            String url = baseURL + "location=" + String.valueOf(mLastLocation.getLatitude()) + "," + String.valueOf(mLastLocation.getLongitude()) + "&radius=10000&types=movie_theater&key=" + getString(R.string.google_web_key);
+            String url = baseURL + "location=" + String.valueOf(mLastLocation.getLatitude()) + "," + String.valueOf(mLastLocation.getLongitude()) + "&radius=" + String.valueOf(radiusSetting) +"&types=movie_theater&key=" + getString(R.string.google_web_key);
             DownloadPlacesTask downloadPlacesTask = new DownloadPlacesTask(this);
             Log.d("FinalProject", "running task: " + url);
             downloadPlacesTask.execute(url);

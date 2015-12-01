@@ -27,6 +27,8 @@ import android.widget.VideoView;
  * Use the {@link YouTubeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
+//supposed to be TRAILERFRAGMENT
 public class YouTubeFragment extends Fragment {
     private SurfaceView surface = null;
     private SurfaceHolder holder = null;
@@ -79,17 +81,15 @@ public class YouTubeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_you_tube, container, false);
-/*                                                                                      -------------supposed to use this not setcontent view
-        View rootView = inflater.inflate(R.layout.about_screeen, container, false);
+        /*               -------------supposed to use this not setcontent view
+        View rootView = inflater.inflate(R.layout.activity_play_video, container, false);
         return rootView;
-*/
-
+        */
     }
     private MediaPlayer player;
 
     public void downloadAndPlayVideo(View view) {
         String url = "https://www.youtube.com/watch?v=sGbxmsDFVnE";
-        //setContentView(R.layout.activity_play_video);
 
         surface = (SurfaceView)getView().findViewById(R.id.surfaceView);
         holder = surface.getHolder();
